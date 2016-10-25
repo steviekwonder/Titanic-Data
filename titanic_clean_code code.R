@@ -1,45 +1,26 @@
 ## Dealing with missing values
 
+titanic_original <- read.csv("~/Desktop/GRE Vocab Data Analytics/titanic_original.csv")
+
 ## 1. Find missing values and fill them with value, S
 embarked <- titanic_original$embarked
-i <- 1
-while(i <= 1310){
-  if(embarked[i] == "") {
-    embarked[i] <- "S"
-  }
-  i <- i + 1
-}
+embarked[embarked == ""] <- "S"
 
 ## 2. Calculate mean of Age column and use that value to populate the missing values
 age <- titanic_original$age
-j <- 1
-while(j <= 1310) {
-  if(is.na(age[j]) == TRUE) {
-    age[j] <- round(mean(titanic_original$age, na.rm = TRUE))
-  }
-  j <- j + 1
-}
+age[is.na(age) == TRUE] <- round(mean(titanic_original$age, na.rm = TRUE))
+
 
 ## 3. Fill empty slots in boat variable with 'None'
 boat <- titanic_original$boat
-k <- 1
-while(k <= 1310) {
-  if(boat[k] == "") {
-    boat[k] <- NA
-  }
-  k <- k + 1
-}
+boat[boat == ""] <- NA
 
 ## 4. Create variable has_cabin_number that has a value of 1 if there is a cabin number for passenger and 0 if there isn't. 
-has_cabin_number <- 1:1310
-l <- 1
-while(l <= 1310) {
-  if(titanic_original$cabin[l] == "") {
-    has_cabin_number[l] <- 0
-  }
-  else{has_cabin_number[l] <- 1}
-  l <- l + 1
-}
+
+has_cabin_number <- titanic_original$cabin
+has_cabin_number <- sub("[ABCDEFGHIJKLMNOPQRSTUVWXYZ].*[[:digit:]]+", 1, has_cabin_number)
+has_cabin_number <- sub("[ABCDEFGHIJKLMNOPQRSTUVWXYZ]", 1, has_cabin_number)
+has_cabin_number[has_cabin_number != 1] <- 0
 
 ## Assign edited version of data frame to titanic_refine
 titanic_clean <- titanic_original
